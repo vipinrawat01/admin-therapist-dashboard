@@ -1,9 +1,16 @@
 
 import { useState } from 'react';
-import { BarChart, LineChart, PieChart, Calendar, Users, TrendingUp, Download, Filter } from 'lucide-react';
+import { BarChart, LineChart, PieChart, Calendar, Users, TrendingUp, Download, Filter, ChevronDown } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import ReportCard from '@/components/cards/ReportCard';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -16,6 +23,8 @@ import { useToast } from '@/components/ui/use-toast';
 
 const Reports = () => {
   const [reportTypeFilter, setReportTypeFilter] = useState<string[]>([]);
+  const [selectedReport, setSelectedReport] = useState<string | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const { toast } = useToast();
 
   const reports = [
@@ -23,44 +32,34 @@ const Reports = () => {
       id: '1',
       type: 'progress',
       title: 'Child Progress Reports',
-      description: 'Track individual children\'s progress toward therapy goals',
+      description: 'Tracks individual therapy progress by domain (Speech, OT, ADL, Sensory, Behavior)',
       icon: <TrendingUp className="h-5 w-5 text-therapy-green" />,
+      content: 'Detailed view of child progress across various therapy domains.'
     },
     {
       id: '2',
       type: 'effectiveness',
-      title: 'Therapist Effectiveness',
-      description: 'Analyze therapist performance and client outcomes',
+      title: 'Therapist Effectiveness Reports',
+      description: 'Measures progress rate per therapist',
       icon: <BarChart className="h-5 w-5 text-therapy-blue" />,
+      content: 'Analytics on therapist performance metrics and client outcomes.'
     },
     {
       id: '3',
       type: 'engagement',
-      title: 'Parent Engagement',
-      description: 'Measure parent participation and home exercise completion',
+      title: 'Parental Engagement Reports',
+      description: 'AI evaluates home therapy involvement & provides strategies to increase engagement',
       icon: <Users className="h-5 w-5 text-therapy-purple" />,
+      content: 'AI-driven analysis of parental involvement in home therapy activities with actionable recommendations.'
     },
     {
       id: '4',
-      type: 'session',
-      title: 'Session Analytics',
-      description: 'Review session frequency, duration, and goal achievement',
+      type: 'comparison',
+      title: 'Comparison Reports',
+      description: 'Compares child progress vs expected milestones based on therapy data',
       icon: <LineChart className="h-5 w-5 text-therapy-orange" />,
-    },
-    {
-      id: '5',
-      type: 'attendance',
-      title: 'Attendance Reports',
-      description: 'Track session attendance, cancellations, and reschedules',
-      icon: <Calendar className="h-5 w-5 text-therapy-yellow" />,
-    },
-    {
-      id: '6',
-      type: 'custom',
-      title: 'Custom Reports',
-      description: 'Create tailored reports with your own parameters',
-      icon: <PieChart className="h-5 w-5 text-therapy-red" />,
-    },
+      content: 'Benchmark analysis comparing child progress against developmental milestones.'
+    }
   ];
 
   const filteredReports = reportTypeFilter.length > 0
@@ -82,20 +81,17 @@ const Reports = () => {
   const handleOpenReport = (reportId: string) => {
     // Find report details
     const report = reports.find(r => r.id === reportId);
+    if (!report) return;
     
-    toast({
-      title: `${report?.title}`,
-      description: "Loading report data...",
-    });
-    
-    // In a real application, this would navigate to the specific report view
+    setSelectedReport(reportId);
+    setOpenDialog(true);
   };
 
   return (
     <PageLayout title="Reports">
       <div className="flex justify-between items-center mb-6">
         <p className="text-muted-foreground max-w-2xl">
-          This page will display various reporting options including child progress, therapist effectiveness, parental engagement, and compilation reports.
+          Access detailed reports on child progress, therapist effectiveness, parental engagement, and milestone comparisons.
         </p>
         
         <div className="flex gap-2">
@@ -109,6 +105,7 @@ const Reports = () => {
                     {reportTypeFilter.length}
                   </span>
                 )}
+                <ChevronDown className="h-4 w-4 ml-1" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -133,22 +130,10 @@ const Reports = () => {
                 Engagement Reports
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={reportTypeFilter.includes('session')}
-                onCheckedChange={() => toggleReportTypeFilter('session')}
+                checked={reportTypeFilter.includes('comparison')}
+                onCheckedChange={() => toggleReportTypeFilter('comparison')}
               >
-                Session Reports
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={reportTypeFilter.includes('attendance')}
-                onCheckedChange={() => toggleReportTypeFilter('attendance')}
-              >
-                Attendance Reports
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={reportTypeFilter.includes('custom')}
-                onCheckedChange={() => toggleReportTypeFilter('custom')}
-              >
-                Custom Reports
+                Comparison Reports
               </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               <Button 
@@ -169,7 +154,7 @@ const Reports = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 animate-fade-in">
         {filteredReports.map(report => (
           <ReportCard
             key={report.id}
@@ -200,6 +185,44 @@ const Reports = () => {
           </Button>
         </div>
       )}
+
+      {/* Report Dialog */}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-[625px]">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedReport && reports.find(r => r.id === selectedReport)?.title}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedReport && reports.find(r => r.id === selectedReport)?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <div className="rounded-md bg-muted p-6">
+              {selectedReport && (
+                <div className="space-y-4">
+                  <p>{reports.find(r => r.id === selectedReport)?.content}</p>
+                  <p className="text-sm text-muted-foreground italic">
+                    Detailed report data and visualizations will be displayed here.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex justify-end mt-4">
+            <Button 
+              onClick={() => setOpenDialog(false)}
+              variant="outline" 
+              className="mr-2"
+            >
+              Close
+            </Button>
+            <Button>Generate Full Report</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PageLayout>
   );
 };

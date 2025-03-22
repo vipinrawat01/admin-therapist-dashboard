@@ -1,10 +1,10 @@
 
 import { useState } from 'react';
-import { BarChart, PieChart, FileText, TrendingUp, Users, Calendar } from 'lucide-react';
+import { BarChart, PieChart, FileText, TrendingUp, Users, Calendar, ArrowRight, LineChart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ReportCardProps {
-  type: 'progress' | 'effectiveness' | 'engagement' | 'session' | 'attendance' | 'custom';
+  type: 'progress' | 'effectiveness' | 'engagement' | 'comparison' | 'session' | 'attendance' | 'custom';
   title: string;
   description: string;
   icon?: React.ReactNode;
@@ -22,6 +22,8 @@ const ReportCard = ({ type, title, description, icon, onClick }: ReportCardProps
         return icon || <BarChart className="h-5 w-5 text-therapy-blue" />;
       case 'engagement':
         return icon || <Users className="h-5 w-5 text-therapy-purple" />;
+      case 'comparison':
+        return icon || <LineChart className="h-5 w-5 text-therapy-orange" />;
       case 'session':
         return icon || <Calendar className="h-5 w-5 text-therapy-orange" />;
       case 'attendance':
@@ -39,6 +41,8 @@ const ReportCard = ({ type, title, description, icon, onClick }: ReportCardProps
         return 'bg-therapy-blue/10';
       case 'engagement':
         return 'bg-therapy-purple/10';
+      case 'comparison':
+        return 'bg-therapy-orange/10';
       case 'session':
         return 'bg-therapy-orange/10';
       case 'attendance':
@@ -51,7 +55,7 @@ const ReportCard = ({ type, title, description, icon, onClick }: ReportCardProps
   return (
     <div 
       className={cn(
-        "therapy-card cursor-pointer transition-all duration-300 card-hover-effect relative overflow-hidden",
+        "therapy-card cursor-pointer transition-all duration-300 card-hover-effect relative overflow-hidden p-6",
         isHovered && "transform-gpu scale-[1.02]"
       )}
       onClick={onClick}
@@ -71,8 +75,14 @@ const ReportCard = ({ type, title, description, icon, onClick }: ReportCardProps
           {getIcon()}
         </div>
         
-        <div>
-          <h3 className="font-medium">{title}</h3>
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <h3 className="font-medium">{title}</h3>
+            <ArrowRight className={cn(
+              "h-4 w-4 transition-transform duration-300", 
+              isHovered ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
+            )} />
+          </div>
           <p className="text-sm text-muted-foreground mt-1">{description}</p>
         </div>
       </div>
