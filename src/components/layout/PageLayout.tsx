@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { cn } from '@/lib/utils';
@@ -11,8 +11,8 @@ interface PageLayoutProps {
 }
 
 const PageLayout = ({ children, title, containerClassName }: PageLayoutProps) => {
-  // Add entrance animation when component mounts
-  useEffect(() => {
+  // Use a ref-based approach for animations to avoid issues
+  React.useEffect(() => {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     
     const observer = new IntersectionObserver((entries) => {
