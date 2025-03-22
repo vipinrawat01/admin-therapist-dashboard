@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { Search, Filter, Plus, Users } from 'lucide-react';
+import { Search, Filter, Plus, Users, ChevronDown } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import TherapistCard from '@/components/cards/TherapistCard';
 import { Button } from '@/components/ui/button';
