@@ -1,7 +1,5 @@
 
-import { useState } from 'react';
-import { User, ChevronRight, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { User, Star, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TherapistCardProps {
@@ -19,42 +17,40 @@ interface TherapistCardProps {
 }
 
 const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
   // Helper function to get badge class based on specialty
   const getBadgeClass = (specialty: string) => {
     const specialtyLower = specialty.toLowerCase();
-    if (specialtyLower.includes('speech')) return 'badge-speech';
-    if (specialtyLower.includes('behavior')) return 'badge-behavior';
-    if (specialtyLower.includes('sensory')) return 'badge-sensory';
-    if (specialtyLower.includes('occupational')) return 'badge-occupational';
-    if (specialtyLower.includes('adl')) return 'badge-adl';
-    if (specialtyLower.includes('special')) return 'badge-special';
-    return 'therapy-badge bg-gray-100 text-gray-700';
+    
+    if (specialtyLower === 'speech') 
+      return 'bg-blue-100 text-blue-600';
+    if (specialtyLower === 'behavior') 
+      return 'bg-purple-100 text-purple-600';
+    if (specialtyLower === 'sensory') 
+      return 'bg-pink-100 text-pink-600';
+    if (specialtyLower === 'occupational') 
+      return 'bg-green-100 text-green-600';
+    if (specialtyLower === 'adl') 
+      return 'bg-orange-100 text-orange-600';
+    if (specialtyLower === 'special') 
+      return 'bg-yellow-100 text-yellow-600';
+    
+    return 'bg-gray-100 text-gray-600';
   };
+  
+  // First letter for avatar
+  const firstLetter = therapist.name.split(' ')[0][0];
   
   return (
     <div 
       className={cn(
-        "therapy-card cursor-pointer transition-all card-hover-effect relative overflow-hidden",
-        selected && "ring-2 ring-primary",
-        isHovered && "transform-gpu"
+        "bg-white border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md",
+        selected && "ring-2 ring-primary"
       )}
       onClick={() => onSelect(therapist.id)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Highlight bar animation */}
-      <div
-        className={cn(
-          "absolute top-0 left-0 h-1 bg-primary transition-all duration-300", 
-          isHovered ? "w-full" : "w-0"
-        )}
-      />
-      
       <div className="flex items-start gap-4">
-        <div className="avatar-initial w-10 h-10 text-white">
-          {therapist.name.charAt(0)}
+        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium text-xl">
+          {firstLetter}
         </div>
         
         <div className="flex-1">
@@ -69,34 +65,31 @@ const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) =>
             </div>
           </div>
           
-          <div className="flex items-center mt-3 text-sm">
-            <div className="flex items-center gap-1 mr-4">
+          <div className="flex items-center mt-3 text-sm gap-5">
+            <div className="flex items-center gap-1">
               <User className="w-4 h-4 text-muted-foreground" />
               <span>{therapist.children} children</span>
             </div>
-            <div className="text-muted-foreground">
-              {therapist.sessions} sessions
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4 text-muted-foreground" />
+              <span>{therapist.sessions} sessions</span>
             </div>
           </div>
           
           <div className="mt-3 flex flex-wrap gap-2">
             {therapist.specialties.map((specialty, i) => (
-              <span key={i} className={getBadgeClass(specialty)}>
+              <span 
+                key={i} 
+                className={cn(
+                  "text-xs px-2 py-1 rounded-full",
+                  getBadgeClass(specialty)
+                )}
+              >
                 {specialty}
               </span>
             ))}
           </div>
         </div>
-      </div>
-      
-      <div className={cn(
-        "mt-4 pt-3 border-t border-border flex justify-end transition-opacity duration-300",
-        isHovered ? "opacity-100" : "opacity-70"
-      )}>
-        <Button variant="ghost" size="sm" className="gap-1 text-primary">
-          <span>View details</span>
-          <ChevronRight className="w-4 h-4" />
-        </Button>
       </div>
     </div>
   );
