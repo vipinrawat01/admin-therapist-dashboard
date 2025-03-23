@@ -15,7 +15,10 @@ import {
   Lightbulb,
   Clock,
   FileText,
-  Baby
+  Baby,
+  Home,
+  MessageSquare,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -55,8 +58,9 @@ const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Check if we're in the supervisor section
+  // Check if we're in the supervisor or parent section
   const isSupervisor = location.pathname.includes('/supervisor');
+  const isParent = location.pathname.includes('/parent');
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,10 +105,28 @@ const Sidebar = () => {
     { to: "/supervisor/recommendations", icon: Lightbulb, label: "Recommendations" },
     { to: "/supervisor/sessions", icon: Calendar, label: "Sessions" },
     { to: "/supervisor/reports", icon: FileText, label: "Reports" },
+    { to: "/supervisor/parent-messages", icon: MessageSquare, label: "Parent Messages" },
     { to: "/supervisor/profile", icon: User, label: "Profile" },
   ];
+  
+  // Parent links
+  const parentLinks = [
+    { to: "/parent/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/parent/home-activities", icon: BookOpen, label: "Home Activities" },
+    { to: "/parent/messages", icon: MessageSquare, label: "Messages" },
+    { to: "/parent/profile", icon: User, label: "Profile" },
+  ];
 
-  const links = isSupervisor ? supervisorLinks : adminLinks;
+  let links = adminLinks;
+  let userType = "Admin";
+  
+  if (isSupervisor) {
+    links = supervisorLinks;
+    userType = "Supervisor";
+  } else if (isParent) {
+    links = parentLinks;
+    userType = "Parent";
+  }
 
   return (
     <>
@@ -178,12 +200,12 @@ const Sidebar = () => {
         <div className={cn("p-4 border-t border-sidebar-border", isCollapsed && !isMobile ? "hidden" : "")}>
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
-              <span className="text-sm font-medium">S</span>
+              <span className="text-sm font-medium">{userType.charAt(0)}</span>
             </div>
             {!isCollapsed && (
               <div className="animate-slide-in">
-                <p className="text-sm font-medium">Supervisor</p>
-                <p className="text-xs text-sidebar-foreground">supervisor@example.com</p>
+                <p className="text-sm font-medium">{userType}</p>
+                <p className="text-xs text-sidebar-foreground">example@example.com</p>
               </div>
             )}
           </div>
@@ -193,7 +215,10 @@ const Sidebar = () => {
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground mb-2">Need assistance?</p>
             <p className="text-xs text-muted-foreground">Get help with therapy management and reports.</p>
-            <Link to="/supervisor/dashboard" className="text-xs text-primary flex items-center mt-2">
+            <Link 
+              to={isParent ? "/parent/dashboard" : (isSupervisor ? "/supervisor/dashboard" : "/")} 
+              className="text-xs text-primary flex items-center mt-2"
+            >
               View Dashboard
               <svg width="16" height="16" viewBox="0 0 16 16" className="ml-1" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

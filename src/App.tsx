@@ -27,6 +27,12 @@ import SupervisorReports from "./pages/supervisor/Reports";
 import SupervisorProfile from "./pages/supervisor/Profile";
 import SupervisorParentMessages from "./pages/supervisor/ParentMessages";
 
+// Parent Pages
+import ParentDashboard from "./pages/parent/Dashboard";
+import ParentHomeActivities from "./pages/parent/HomeActivities";
+import ParentMessages from "./pages/parent/Messages";
+import ParentProfile from "./pages/parent/Profile";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -56,6 +62,12 @@ const App = () => (
             <Route path="/supervisor/reports" element={<SupervisorReports />} />
             <Route path="/supervisor/profile" element={<SupervisorProfile />} />
             <Route path="/supervisor/parent-messages" element={<SupervisorParentMessages />} />
+            
+            {/* Parent Routes */}
+            <Route path="/parent/dashboard" element={<ParentDashboard />} />
+            <Route path="/parent/home-activities" element={<ParentHomeActivities />} />
+            <Route path="/parent/messages" element={<ParentMessages />} />
+            <Route path="/parent/profile" element={<ParentProfile />} />
 
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
