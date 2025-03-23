@@ -10,7 +10,12 @@ import {
   FileBarChart, 
   User,
   Menu,
-  X
+  X,
+  Calendar,
+  Lightbulb,
+  Clock,
+  FileText,
+  Baby
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -50,6 +55,9 @@ const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
+  // Check if we're in the supervisor section
+  const isSupervisor = location.pathname.includes('/supervisor');
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -73,7 +81,8 @@ const Sidebar = () => {
     }
   };
 
-  const links = [
+  // Original admin links
+  const adminLinks = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/therapists", icon: Users, label: "Therapists" },
     { to: "/user-management", icon: UserCog, label: "User Management" },
@@ -82,6 +91,20 @@ const Sidebar = () => {
     { to: "/reports", icon: FileBarChart, label: "Reports" },
     { to: "/profile", icon: User, label: "Profile" },
   ];
+
+  // Supervisor links
+  const supervisorLinks = [
+    { to: "/supervisor/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/supervisor/therapists", icon: Users, label: "Therapists" },
+    { to: "/supervisor/children", icon: Baby, label: "Children" },
+    { to: "/supervisor/child-progress", icon: FileBarChart, label: "Child Progress" },
+    { to: "/supervisor/recommendations", icon: Lightbulb, label: "Recommendations" },
+    { to: "/supervisor/sessions", icon: Calendar, label: "Sessions" },
+    { to: "/supervisor/reports", icon: FileText, label: "Reports" },
+    { to: "/supervisor/profile", icon: User, label: "Profile" },
+  ];
+
+  const links = isSupervisor ? supervisorLinks : adminLinks;
 
   return (
     <>
@@ -155,14 +178,27 @@ const Sidebar = () => {
         <div className={cn("p-4 border-t border-sidebar-border", isCollapsed && !isMobile ? "hidden" : "")}>
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
-              <span className="text-sm font-medium">A</span>
+              <span className="text-sm font-medium">S</span>
             </div>
             {!isCollapsed && (
               <div className="animate-slide-in">
-                <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-sidebar-foreground">admin@example.com</p>
+                <p className="text-sm font-medium">Supervisor</p>
+                <p className="text-xs text-sidebar-foreground">supervisor@example.com</p>
               </div>
             )}
+          </div>
+        </div>
+
+        <div className="px-4 py-3 border-t border-sidebar-border">
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground mb-2">Need assistance?</p>
+            <p className="text-xs text-muted-foreground">Get help with therapy management and reports.</p>
+            <Link to="/supervisor/dashboard" className="text-xs text-primary flex items-center mt-2">
+              View Dashboard
+              <svg width="16" height="16" viewBox="0 0 16 16" className="ml-1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
           </div>
         </div>
       </aside>
