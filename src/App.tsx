@@ -25,6 +25,7 @@ import SupervisorRecommendations from "./pages/supervisor/Recommendations";
 import SupervisorSessions from "./pages/supervisor/Sessions";
 import SupervisorReports from "./pages/supervisor/Reports";
 import SupervisorProfile from "./pages/supervisor/Profile";
+import SupervisorParentMessages from "./pages/supervisor/ParentMessages";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/supervisor/sessions" element={<SupervisorSessions />} />
             <Route path="/supervisor/reports" element={<SupervisorReports />} />
             <Route path="/supervisor/profile" element={<SupervisorProfile />} />
+            <Route path="/supervisor/parent-messages" element={<SupervisorParentMessages />} />
 
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />

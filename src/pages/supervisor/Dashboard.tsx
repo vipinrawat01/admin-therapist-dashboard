@@ -10,7 +10,8 @@ import {
   BarChart3,
   Mail,
   FileDown,
-  FileText
+  FileText,
+  MessageSquare
 } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import StatCardSimple from '@/components/cards/StatCardSimple';
@@ -211,7 +212,14 @@ const SupervisorDashboard = () => {
                 Schedule Review
               </Button>
               
-              <Button variant="outline" className="justify-start gap-2 md:col-span-2" onClick={() => handleQuickAction('Submit Monthly Report')}>
+              <Button variant="outline" className="justify-start gap-2" asChild>
+                <a href="/supervisor/parent-messages">
+                  <MessageSquare className="h-4 w-4" />
+                  Message Parents
+                </a>
+              </Button>
+              
+              <Button variant="outline" className="justify-start gap-2" onClick={() => handleQuickAction('Submit Monthly Report')}>
                 <FileText className="h-4 w-4" />
                 Submit Monthly Report
               </Button>
