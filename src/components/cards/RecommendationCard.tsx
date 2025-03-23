@@ -10,22 +10,13 @@ interface RecommendationCardProps {
     childName: string;
     therapyType: string;
     date: string;
-    priority: 'high' | 'medium' | 'low';
     description: string;
+    isApproved?: boolean;
   };
   onReview: (id: string) => void;
 }
 
 const RecommendationCard = ({ recommendation, onReview }: RecommendationCardProps) => {
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-amber-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-muted-foreground';
-    }
-  };
-  
   const getTherapyTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'speech': return 'bg-blue-100 text-blue-600';
@@ -52,12 +43,9 @@ const RecommendationCard = ({ recommendation, onReview }: RecommendationCardProp
         </div>
         
         <div className="flex flex-col items-end">
-          <span className={cn(
-            "text-sm font-medium",
-            getPriorityColor(recommendation.priority)
-          )}>
-            {recommendation.priority} priority
-          </span>
+          {recommendation.isApproved && (
+            <span className="text-sm font-medium text-green-600">Approved</span>
+          )}
           <span className="text-xs text-muted-foreground mt-1">{recommendation.date}</span>
         </div>
       </div>
@@ -69,11 +57,13 @@ const RecommendationCard = ({ recommendation, onReview }: RecommendationCardProp
       
       <div className="self-end">
         <Button 
-          variant="outline" 
+          variant={recommendation.isApproved ? "outline" : "outline"} 
           size="sm"
           onClick={() => onReview(recommendation.id)}
+          className={recommendation.isApproved ? "border-green-600 text-green-600" : ""}
+          disabled={recommendation.isApproved}
         >
-          Review & Approve
+          {recommendation.isApproved ? "Approved" : "Review & Approve"}
         </Button>
       </div>
     </div>
