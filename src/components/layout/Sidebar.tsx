@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -58,7 +57,6 @@ const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Check if we're in the supervisor or parent section
   const isSupervisor = location.pathname.includes('/supervisor');
   const isParent = location.pathname.includes('/parent');
 
@@ -85,10 +83,10 @@ const Sidebar = () => {
     }
   };
 
-  // Original admin links
   const adminLinks = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/therapists", icon: Users, label: "Therapists" },
+    { to: "/supervisors", icon: ShieldCheck, label: "Supervisors" },
     { to: "/user-management", icon: UserCog, label: "User Management" },
     { to: "/role-management", icon: ShieldCheck, label: "Role Management" },
     { to: "/system-settings", icon: Settings, label: "System Settings" },
@@ -96,7 +94,6 @@ const Sidebar = () => {
     { to: "/profile", icon: User, label: "Profile" },
   ];
 
-  // Supervisor links
   const supervisorLinks = [
     { to: "/supervisor/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/supervisor/therapists", icon: Users, label: "Therapists" },
@@ -109,7 +106,6 @@ const Sidebar = () => {
     { to: "/supervisor/profile", icon: User, label: "Profile" },
   ];
   
-  // Parent links
   const parentLinks = [
     { to: "/parent/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/parent/home-activities", icon: BookOpen, label: "Home Activities" },
@@ -130,7 +126,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Menu Button */}
       <button 
         className="fixed top-4 left-4 z-50 p-2 rounded-md bg-primary text-white lg:hidden"
         onClick={toggleSidebar}
@@ -139,7 +134,6 @@ const Sidebar = () => {
         {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar Backdrop for Mobile */}
       {isMobile && isSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300"
@@ -147,7 +141,6 @@ const Sidebar = () => {
         />
       )}
 
-      {/* Sidebar */}
       <aside 
         className={cn(
           "bg-sidebar flex flex-col h-screen border-r border-sidebar-border transition-all duration-300 ease-in-out z-50",

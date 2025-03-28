@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Admin Pages
 import Dashboard from "./pages/Dashboard";
 import Therapists from "./pages/Therapists";
+import Supervisors from "./pages/Supervisors";
 import UserManagement from "./pages/UserManagement";
 import RoleManagement from "./pages/RoleManagement";
 import SystemSettings from "./pages/SystemSettings";
@@ -46,6 +47,7 @@ const App = () => (
             {/* Admin Routes */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/therapists" element={<Therapists />} />
+            <Route path="/supervisors" element={<Supervisors />} />
             <Route path="/user-management" element={<UserManagement />} />
             <Route path="/role-management" element={<RoleManagement />} />
             <Route path="/system-settings" element={<SystemSettings />} />

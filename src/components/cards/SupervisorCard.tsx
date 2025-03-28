@@ -1,26 +1,23 @@
 
-import { User, Star, Calendar, ShieldCheck } from 'lucide-react';
+import { User, Star, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface TherapistCardProps {
-  therapist: {
+interface SupervisorCardProps {
+  supervisor: {
     id: string;
     name: string;
     specialty: string;
     rating: number;
+    therapists: number;
     children: number;
-    sessions: number;
+    experience: string;
     specialties: string[];
-    supervisor?: {
-      id: string;
-      name: string;
-    };
   };
   onSelect: (id: string) => void;
   selected?: boolean;
 }
 
-const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) => {
+const SupervisorCard = ({ supervisor, onSelect, selected }: SupervisorCardProps) => {
   // Helper function to get badge class based on specialty
   const getBadgeClass = (specialty: string) => {
     const specialtyLower = specialty.toLowerCase();
@@ -37,12 +34,14 @@ const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) =>
       return 'bg-orange-100 text-orange-600';
     if (specialtyLower === 'special') 
       return 'bg-yellow-100 text-yellow-600';
+    if (specialtyLower === 'developmental') 
+      return 'bg-teal-100 text-teal-600';
     
     return 'bg-gray-100 text-gray-600';
   };
   
   // First letter for avatar
-  const firstLetter = therapist.name.split(' ')[0][0];
+  const firstLetter = supervisor.name.split(' ')[0][0];
   
   return (
     <div 
@@ -50,47 +49,38 @@ const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) =>
         "bg-white border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md",
         selected && "ring-2 ring-primary"
       )}
-      onClick={() => onSelect(therapist.id)}
+      onClick={() => onSelect(supervisor.id)}
     >
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium text-xl">
+        <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium text-xl">
           {firstLetter}
         </div>
         
         <div className="flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-medium">{therapist.name}</h3>
-              <p className="text-sm text-muted-foreground">{therapist.specialty}</p>
+              <h3 className="font-medium">{supervisor.name}</h3>
+              <p className="text-sm text-muted-foreground">{supervisor.specialty}</p>
             </div>
             <div className="flex items-center gap-1">
               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-              <span className="text-sm font-medium">{therapist.rating.toFixed(1)}</span>
+              <span className="text-sm font-medium">{supervisor.rating.toFixed(1)}</span>
             </div>
           </div>
-          
-          {therapist.supervisor && (
-            <div className="flex items-center mt-2 text-sm">
-              <div className="flex items-center gap-1 bg-indigo-50 text-indigo-600 px-2 py-1 rounded-full">
-                <ShieldCheck className="w-3 h-3" />
-                <span>Supervisor: {therapist.supervisor.name}</span>
-              </div>
-            </div>
-          )}
           
           <div className="flex items-center mt-3 text-sm gap-5">
             <div className="flex items-center gap-1">
               <User className="w-4 h-4 text-muted-foreground" />
-              <span>{therapist.children} children</span>
+              <span>{supervisor.therapists} therapists</span>
             </div>
             <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
-              <span>{therapist.sessions} sessions</span>
+              <Users className="w-4 h-4 text-muted-foreground" />
+              <span>{supervisor.children} children</span>
             </div>
           </div>
           
           <div className="mt-3 flex flex-wrap gap-2">
-            {therapist.specialties.map((specialty, i) => (
+            {supervisor.specialties.map((specialty, i) => (
               <span 
                 key={i} 
                 className={cn(
@@ -108,4 +98,4 @@ const TherapistCard = ({ therapist, onSelect, selected }: TherapistCardProps) =>
   );
 };
 
-export default TherapistCard;
+export default SupervisorCard;

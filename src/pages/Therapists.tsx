@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Search, Filter, Plus, Users, ChevronDown } from 'lucide-react';
+import { Search, Filter, Plus, Users, ChevronDown, Star, User } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import TherapistCard from '@/components/cards/TherapistCard';
 import { Button } from '@/components/ui/button';
@@ -24,6 +23,10 @@ const therapists = [
     children: 8,
     sessions: 24,
     specialties: ['speech', 'occupational', 'ADL'],
+    supervisor: {
+      id: '1',
+      name: 'Dr. Sarah Johnson'
+    },
     childrenData: [
       { name: 'Emma Brown', age: 6, diagnosis: 'Autism Spectrum Disorder', progress: [60, 40] },
       { name: 'Liam Brown', age: 5, diagnosis: 'Speech Delay', progress: [75, 50] },
@@ -40,6 +43,10 @@ const therapists = [
     children: 6,
     sessions: 18,
     specialties: ['behavior', 'special'],
+    supervisor: {
+      id: '1',
+      name: 'Dr. Sarah Johnson'
+    },
     childrenData: [
       { name: 'Ava Wilson', age: 5, diagnosis: 'Autism Spectrum Disorder', progress: [55, 35] },
       { name: 'Benjamin Lee', age: 7, diagnosis: 'ADHD', progress: [65, 50] },
@@ -57,6 +64,10 @@ const therapists = [
     children: 5,
     sessions: 15,
     specialties: ['sensory', 'occupational'],
+    supervisor: {
+      id: '2',
+      name: 'Dr. Robert Williams'
+    },
     childrenData: [
       { name: 'Grace White', age: 4, diagnosis: 'Sensory Processing Disorder', progress: [50, 40] },
       { name: 'Henry Garcia', age: 6, diagnosis: 'Autism Spectrum Disorder', progress: [60, 45] },
@@ -73,6 +84,10 @@ const therapists = [
     children: 7,
     sessions: 21,
     specialties: ['ADL', 'behavior'],
+    supervisor: {
+      id: '3',
+      name: 'Dr. Jennifer Davis'
+    },
     childrenData: [
       { name: 'Logan Clark', age: 6, diagnosis: 'Autism Spectrum Disorder', progress: [55, 40] },
       { name: 'Mia Rodriguez', age: 5, diagnosis: 'Autism Spectrum Disorder', progress: [50, 35] },
