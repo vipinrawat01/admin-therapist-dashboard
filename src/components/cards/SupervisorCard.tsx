@@ -49,7 +49,10 @@ const SupervisorCard = ({ supervisor, onSelect, selected }: SupervisorCardProps)
         "bg-white border rounded-lg p-5 cursor-pointer transition-all hover:shadow-md",
         selected && "ring-2 ring-primary"
       )}
-      onClick={() => onSelect(supervisor.id)}
+      onClick={(e) => {
+        e.preventDefault();
+        onSelect(supervisor.id);
+      }}
     >
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium text-xl">

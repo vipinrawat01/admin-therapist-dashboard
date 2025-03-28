@@ -151,6 +151,11 @@ const Supervisors = () => {
     );
   };
 
+  const handleSupervisorSelect = (id: string) => {
+    // Prevent navigation by using a local state change only
+    setSelectedSupervisor(id);
+  };
+
   return (
     <PageLayout title="Supervisors" containerClassName="max-w-7xl mx-auto">
       <div className="mb-2">
@@ -230,7 +235,7 @@ const Supervisors = () => {
                 <SupervisorCard 
                   key={supervisor.id} 
                   supervisor={supervisor} 
-                  onSelect={setSelectedSupervisor} 
+                  onSelect={handleSupervisorSelect} 
                   selected={selectedSupervisor === supervisor.id}
                 />
               ))
