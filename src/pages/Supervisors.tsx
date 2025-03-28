@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Search, Filter, Plus, Users, ChevronDown, User, Star } from 'lucide-react';
+import { Search, Filter, Plus, Users, ChevronDown, User, Star, Baby } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import SupervisorCard from '@/components/cards/SupervisorCard';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+  DialogClose
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from '@/lib/utils';
+import { toast } from "sonner";
+
+// Mock data for children
+const childrenData = [
+  { id: '1', name: 'Noah Williams', age: 5, needsType: 'Speech Therapy' },
+  { id: '2', name: 'Mia Rodriguez', age: 7, needsType: 'Occupational Therapy' },
+  { id: '3', name: 'Ethan Johnson', age: 4, needsType: 'Behavioral Therapy' },
+  { id: '4', name: 'Olivia Chen', age: 6, needsType: 'Speech Therapy' },
+  { id: '5', name: 'Jackson Taylor', age: 8, needsType: 'Sensory Therapy' },
+  { id: '6', name: 'Sophia Martinez', age: 5, needsType: 'ADL Skills' },
+  { id: '7', name: 'Lucas Davis', age: 4, needsType: 'Developmental Therapy' },
+];
 
 // Mock data for supervisors
 const supervisors = [
@@ -122,6 +150,8 @@ const Supervisors = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [specialtyFilters, setSpecialtyFilters] = useState<string[]>([]);
   const [selectedSupervisor, setSelectedSupervisor] = useState<string | null>(null);
+  const [selectedChild, setSelectedChild] = useState<string>('');
+  const [allocateDialogOpen, setAllocateDialogOpen] = useState(false);
 
   const supervisorDetails = selectedSupervisor 
     ? supervisors.find(s => s.id === selectedSupervisor) 
@@ -154,6 +184,19 @@ const Supervisors = () => {
   const handleSupervisorSelect = (id: string) => {
     // Prevent navigation by using a local state change only
     setSelectedSupervisor(id);
+  };
+
+  const handleAllocateChild = () => {
+    if (!selectedSupervisor || !selectedChild) {
+      toast.error("Please select both a supervisor and a child");
+      return;
+    }
+
+    // In a real application, this would make an API call
+    // Here we're just showing a success message
+    toast.success(`Successfully allocated child to ${supervisorDetails?.name}`);
+    setAllocateDialogOpen(false);
+    setSelectedChild('');
   };
 
   return (
@@ -260,15 +303,73 @@ const Supervisors = () => {
                 <h2 className="text-xl font-semibold">{supervisorDetails?.name}</h2>
                 <p className="text-muted-foreground">Therapists under this supervisor</p>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="gap-1 lg:hidden"
-                onClick={() => setSelectedSupervisor(null)}
-              >
-                <ChevronDown className="h-4 w-4" />
-                <span>Back to List</span>
-              </Button>
+              <div className="flex gap-2">
+                <Dialog open={allocateDialogOpen} onOpenChange={setAllocateDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="gap-1"
+                    >
+                      <Baby className="h-4 w-4" />
+                      <span>Allocate Child</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Allocate Child to Supervisor</DialogTitle>
+                      <DialogDescription>
+                        Assign a child to {supervisorDetails?.name} for therapy supervision.
+                      </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="py-4">
+                      <label className="text-sm font-medium mb-2 block">Select Child</label>
+                      <Select value={selectedChild} onValueChange={setSelectedChild}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a child" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {childrenData.map(child => (
+                            <SelectItem key={child.id} value={child.id}>
+                              {child.name} - {child.needsType}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      
+                      {selectedChild && (
+                        <div className="mt-4 p-3 bg-muted rounded-md">
+                          <p className="font-medium">
+                            {childrenData.find(c => c.id === selectedChild)?.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            Age: {childrenData.find(c => c.id === selectedChild)?.age} • 
+                            Needs: {childrenData.find(c => c.id === selectedChild)?.needsType}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DialogClose>
+                      <Button onClick={handleAllocateChild}>Allocate</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="gap-1 lg:hidden"
+                  onClick={() => setSelectedSupervisor(null)}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                  <span>Back to List</span>
+                </Button>
+              </div>
             </div>
             
             <div className="space-y-4">
