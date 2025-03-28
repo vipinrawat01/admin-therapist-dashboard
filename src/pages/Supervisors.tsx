@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Search, Filter, Plus, Users, ChevronDown } from 'lucide-react';
+import { Search, Filter, Plus, Users, ChevronDown, User, Star } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import SupervisorCard from '@/components/cards/SupervisorCard';
 import { Button } from '@/components/ui/button';
